@@ -1,11 +1,9 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import { Container, Row, Col, Button, Form, Card, ProgressBar } from 'react-bootstrap';
+import { Container, Row, Col, Button, Form, Card, ProgressBar, Modal, Badge, Navbar, Nav, Pagination  } from 'react-bootstrap';
 import { BiRepeat, BiUndo } from "react-icons/bi";
-import { Modal } from 'react-bootstrap';
-import { Badge } from "react-bootstrap";
-import { Navbar, Nav } from "react-bootstrap";
+
 
 import { Dropdown } from 'react-bootstrap';
 
@@ -92,11 +90,11 @@ const ProfilePage = () => {
 
         if (selectedDay === todayStr) {
             const currentHour = new Date().getHours();
-            return timeSlots.filter(slot => slot.start > currentHour);
+            return timeSlots.filter(slot => slot.end > currentHour);
         }
 
         return timeSlots;
-        };
+    };
 
     const timeSlots = [
     { label: "8am - 10am", start: 8, end: 10 },
@@ -108,31 +106,133 @@ const ProfilePage = () => {
 
 
 
-        const orders = [
-        {
-            id: "GW0001",
-            services: ["Dry Clean", "Wash and Steam Iron", "Wash and Fold"],
-            pickupDate: "2024-11-24",
-            pickupTime: "10:00 AM - 11:00 AM"
-        },
-        {
-            id: "GW0002",
-            services: ["Shoe Cleaning", "Steam Iron"],
-            pickupDate: "2024-11-26",
-            pickupTime: "2:00 PM - 3:00 PM"
-        },
-        // Add more orders as needed
-        ];
+       
 
 
+        // Sample dummy orders with statuses
+       const [orders] = useState([
+        {
+          id: 101,
+          services: ["Wash & Iron", "Dry Cleaning"],
+          pickupDate: "2025-05-24",
+          pickupTime: "8am - 10am",
+          status: "New order",
+          products: [
+            { name: "Shirt", quantity: 2, price: 50, image: "" },
+            { name: "Trousers", quantity: 1, price: 80, image: "" },
+          ],
+          payment: null,
+        },
+        {
+          id: 102,
+          services: ["Iron Only"],
+          pickupDate: "2025-05-25",
+          pickupTime: "10am - 12pm",
+          status: "Accepted",
+          products: [{ name: "Shirt", quantity: 3, price: 50, image: "" }],
+          payment: null,
+        },
+        {
+          id: 103,
+          services: ["Dry Cleaning"],
+          pickupDate: "2025-05-25",
+          pickupTime: "12pm - 2pm",
+          status: "Picked Up",
+          products: [{ name: "Jacket", quantity: 1, price: 120, image: "" }],
+          payment: null,
+        },
+        {
+          id: 104,
+          services: ["Wash & Fold"],
+          pickupDate: "2025-05-26",
+          pickupTime: "2pm - 4pm",
+          status: "In Cleaning",
+          products: [{ name: "Jeans", quantity: 4, price: 80, image: "" }],
+          payment: null,
+        },
+        {
+          id: 105,
+          services: ["Wash & Iron"],
+          pickupDate: "2025-05-26",
+          pickupTime: "4pm - 6pm",
+          status: "Out for Delivery",
+          products: [
+            { name: "Shirt", quantity: 1, price: 50, image: "" },
+            { name: "Trousers", quantity: 2, price: 80, image: "" },
+          ],
+          payment: null,
+        },
+        {
+          id: 106,
+          services: ["Dry Cleaning"],
+          pickupDate: "2025-05-27",
+          pickupTime: "8am - 10am",
+          status: "Due",
+          products: [{ name: "Coat", quantity: 1, price: 150, image: "" }],
+          payment: null,
+        },
+        {
+          id: 107,
+          services: ["Wash & Iron"],
+          pickupDate: "2025-05-27",
+          pickupTime: "10am - 12pm",
+          status: "Canceled",
+          products: [{ name: "Shirt", quantity: 2, price: 50, image: "" }],
+          payment: null,
+        },
+        {
+          id: 108,
+          services: ["Wash & Fold"],
+          pickupDate: "2025-05-26",
+          pickupTime: "9:00 AM - 11:00 AM",
+          status: "Delivered",
+          products: [{ name: "Jeans", quantity: 4, price: 80, image: "" }],
+          payment: { amount: 320 },
+        },
+      ]);
+
+
+       const [modalOrder, setModalOrder] = useState(null);
         const [showModal, setShowModal] = useState(false);
-        const [modalOrder, setModalOrder] = useState(null);
+
+        // Pagination state
+        const itemsPerPage = 3;
+        const [currentPage, setCurrentPage] = useState(1);
+        const totalPages = Math.ceil(orders.length / itemsPerPage);
+
+        // Get orders for current page
+        const paginatedOrders = orders.slice(
+          (currentPage - 1) * itemsPerPage,
+          currentPage * itemsPerPage
+        );
+
         const handleViewDetails = (order) => {
-            setModalOrder(order);
-            setShowModal(true);
+          setModalOrder(order);
+          setShowModal(true);
         };
 
+        const handleCloseModal = () => {
+          setShowModal(false);
+          setModalOrder(null);
+        };
 
+        const handlePageChange = (page) => {
+          setCurrentPage(page);
+        };
+
+        // Badge color based on status
+        const statusVariant = {
+        "New Order": "secondary",
+        "Accepted": "info",
+        "Picked Up": "primary",
+        "In Cleaning": "warning",
+        "Out for Delivery": "success",
+        "Due": "danger",
+        "Canceled": "dark",
+      };
+      
+
+        const [selectedStatus, setSelectedStatus] = React.useState("All Orders");
 
         const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -141,6 +241,7 @@ const ProfilePage = () => {
         // Add your deletion logic here, e.g. API call
         console.log("Profile deleted");
         };
+
 
 
 
@@ -181,129 +282,163 @@ const ProfilePage = () => {
             // Optionally clear notifications when opening dropdown:
             if (!showDropdown) setNotifications(0);
         };
+
+
+         // Dummy last order data - replace with your actual last order data
+        const lastOrder = {
+          id: 12345,
+          pickupDate: "2025-05-24",
+          pickupTime: "10:00 AM - 12:00 PM",
+          address: "123, Main Street, Your City",
+          items: [
+            { name: "Laundry", quantity: 3 },
+            { name: "Dry Cleaning", quantity: 2 },
+          ],
+        };
+
+        const handleRepeatClick = () => {
+          setShowModal(true);
+        };
+
+        const handleClose = () => {
+          setShowModal(false);
+        };
+
+        const handleReorder = () => {
+          // Add reorder logic here - e.g. call API or navigate to order confirmation page
+          setShowModal(false);
+        };
+
+
+         const [showUpgradeInfo, setShowUpgradeInfo] = useState(false);
+
+        const handleUpgradeClick = () => {
+          setShowUpgradeInfo(true);
+        };
+
   return (
     <div className="bg-white min-vh-100">
       {/* Navbar */}
-    <Navbar expand="lg" className="bg-white border-bottom shadow-sm px-4 py-2 d-flex align-items-center">
-      {/* Logo + Brand */}
-        <Navbar.Brand href="#" className="d-flex align-items-center gap-2">
-            <span className="fw-semibold text-warning" style={{ fontFamily: 'cursive' }}>
-            GoWash
-            </span>
-        </Navbar.Brand>
+      <Navbar expand="lg" className="bg-white border-bottom shadow-sm px-4 py-2 d-flex align-items-center">
+        {/* Logo + Brand */}
+          <Navbar.Brand href="#" className="d-flex align-items-center gap-2">
+              <span className="fw-semibold text-warning" style={{ fontFamily: 'cursive' }}>
+              GoWash
+              </span>
+          </Navbar.Brand>
 
 
-      {/* Center: Nav Links */}
-        <Nav className="flex-grow-1 justify-content-center gap-4 fw-semibold">
-            <Nav.Link href="#" className="text-dark">Home</Nav.Link>
-            <Nav.Link href="#" className="text-dark">About Us</Nav.Link>
-            <Nav.Link href="#" className="text-dark">Pricing</Nav.Link>
-            <Nav.Link href="#" className="text-dark">Contact Us</Nav.Link>
-        </Nav>
+        {/* Center: Nav Links */}
+          <Nav className="flex-grow-1 justify-content-center gap-4 fw-semibold">
+              <Nav.Link href="#" className="text-dark">Home</Nav.Link>
+              <Nav.Link href="#" className="text-dark">About Us</Nav.Link>
+              <Nav.Link href="#" className="text-dark">Pricing</Nav.Link>
+              <Nav.Link href="#" className="text-dark">Contact Us</Nav.Link>
+          </Nav>
 
-      {/* Right Side Buttons */}
-      <div className="d-flex align-items-center gap-3">
-         <Dropdown>
-            <Dropdown.Toggle
-                variant="light"
-                className="rounded-3 fw-semibold px-3 py-2"
-                id="currency-dropdown"
+        {/* Right Side Buttons */}
+        <div className="d-flex align-items-center gap-3">
+          <Dropdown>
+              <Dropdown.Toggle
+                  variant="light"
+                  className="rounded-3 fw-semibold px-3 py-2"
+                  id="currency-dropdown"
+              >
+                  {selectedCurrency}
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu>
+                  {currencies.map(currency => (
+                  <Dropdown.Item
+                      key={currency}
+                      active={currency === selectedCurrency}
+                      onClick={() => setSelectedCurrency(currency)}
+                  >
+                      {currency}
+                  </Dropdown.Item>
+                  ))}
+              </Dropdown.Menu>
+              </Dropdown>
+
+          <div style={{ position: "relative", display: "inline-block" }}>
+        <Button
+          variant="light"
+          className="rounded-3 p-2"
+          onClick={toggleDropdown}
+        >
+          <i className="bi bi-bell"></i>
+          {notifications > 0 && (
+            <Badge
+              bg="danger"
+              pill
+              style={{
+                position: "absolute",
+                top: 4,
+                right: 4,
+                fontSize: "0.6rem",
+              }}
             >
-                {selectedCurrency}
-            </Dropdown.Toggle>
+              {notifications}
+            </Badge>
+          )}
+        </Button>
 
-            <Dropdown.Menu>
-                {currencies.map(currency => (
-                <Dropdown.Item
-                    key={currency}
-                    active={currency === selectedCurrency}
-                    onClick={() => setSelectedCurrency(currency)}
-                >
-                    {currency}
-                </Dropdown.Item>
-                ))}
-            </Dropdown.Menu>
-            </Dropdown>
-
-        <div style={{ position: "relative", display: "inline-block" }}>
-      <Button
-        variant="light"
-        className="rounded-3 p-2"
-        onClick={toggleDropdown}
-      >
-        <i className="bi bi-bell"></i>
-        {notifications > 0 && (
-          <Badge
-            bg="danger"
-            pill
+        {showDropdown && (
+          <div
             style={{
               position: "absolute",
-              top: 4,
-              right: 4,
-              fontSize: "0.6rem",
+              right: 0,
+              marginTop: 8,
+              width: 250,
+              background: "white",
+              border: "1px solid #ccc",
+              borderRadius: 6,
+              boxShadow: "0 2px 10px rgba(0,0,0,0.15)",
+              zIndex: 1000,
             }}
           >
-            {notifications}
-          </Badge>
+            <div style={{ padding: 12 }}>
+              <strong>Notifications</strong>
+            </div>
+            <hr style={{ margin: 0 }} />
+            <div style={{ maxHeight: 150, overflowY: "auto" }}>
+              {notifications === 0 ? (
+                <div style={{ padding: 12, color: "#666" }}>
+                  No new notifications
+                </div>
+              ) : (
+                <>
+                  <div style={{ padding: 12 }}>Notification 1</div>
+                  <div style={{ padding: 12 }}>Notification 2</div>
+                  <div style={{ padding: 12 }}>Notification 3</div>
+                </>
+              )}
+            </div>
+          </div>
         )}
-      </Button>
-
-      {showDropdown && (
-        <div
-          style={{
-            position: "absolute",
-            right: 0,
-            marginTop: 8,
-            width: 250,
-            background: "white",
-            border: "1px solid #ccc",
-            borderRadius: 6,
-            boxShadow: "0 2px 10px rgba(0,0,0,0.15)",
-            zIndex: 1000,
-          }}
-        >
-          <div style={{ padding: 12 }}>
-            <strong>Notifications</strong>
-          </div>
-          <hr style={{ margin: 0 }} />
-          <div style={{ maxHeight: 150, overflowY: "auto" }}>
-            {notifications === 0 ? (
-              <div style={{ padding: 12, color: "#666" }}>
-                No new notifications
-              </div>
-            ) : (
-              <>
-                <div style={{ padding: 12 }}>Notification 1</div>
-                <div style={{ padding: 12 }}>Notification 2</div>
-                <div style={{ padding: 12 }}>Notification 3</div>
-              </>
-            )}
-          </div>
-        </div>
-      )}
-    </div>
-
-        {/* Profile Dropdown */}
-        <div className="dropdown">
-          <div
-            className="rounded-circle p-2 bg-transparent dropdown-toggle"
-            style={{ width: "36px", height: "36px", cursor: "pointer" }}
-            id="profileDropdown"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <i className="bi bi-person-fill fs-5"></i>
-          </div>
-          <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-            <li><a className="dropdown-item" href="#">My Profile</a></li>
-            <li><a className="dropdown-item" href="#">Orders</a></li>
-            <li><a className="dropdown-item" href="#">Settings</a></li>
-            <li><hr className="dropdown-divider" /></li>
-            <li><a className="dropdown-item text-danger" href="#">Logout</a></li>
-          </ul>
-        </div>
       </div>
-    </Navbar>
+
+          {/* Profile Dropdown */}
+          <Dropdown align="end">
+              <Dropdown.Toggle
+                variant="transparent"
+                id="profileDropdown"
+                className="rounded-circle p-2"
+                style={{ cursor: 'pointer', border: 'none' }}
+              >
+                <i className="bi bi-person-fill fs-5"></i>
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu>
+                <Dropdown.Item href="#">My Profile</Dropdown.Item>
+                <Dropdown.Item href="#">Orders</Dropdown.Item>
+                <Dropdown.Item href="#">Settings</Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item href="#" className="text-danger">Logout</Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+        </div>
+      </Navbar>
 
 
       {/* Tabs */}
@@ -370,7 +505,26 @@ const ProfilePage = () => {
               <ProgressBar now={75} label="75%" />
             </div>
 
-            <Button variant="outline-danger" className="mt-3 w-100">Upgrade Pro</Button>
+           <Button variant="outline-danger" className="mt-3 w-100" onClick={handleUpgradeClick}>
+            Upgrade Pro
+          </Button>
+
+           {showUpgradeInfo && (
+              <Card className="mt-3">
+                <Card.Body>
+                  <Card.Title>Go Pro and Unlock Premium Features</Card.Title>
+                  <Card.Text>
+                    ✅ Unlimited access to all features <br />
+                    ✅ Priority customer support <br />
+                    ✅ Detailed analytics and reporting <br />
+                    ✅ Early access to new features <br />
+                    <strong>Only ₹499/month</strong>
+                  </Card.Text>
+                  <Button variant="primary">Subscribe Now</Button>
+                </Card.Body>
+              </Card>
+            )}
+
           </Col>
 
           {/* Main Content */}
@@ -445,9 +599,52 @@ const ProfilePage = () => {
               <Card>
                 <Card.Body>
                     <div className="d-flex justify-content-between align-items-center mb-3">
-                    <h5><i className="bi bi-person-lines-fill"></i> Request Pickup</h5>
-                    <Button variant="outline-secondary" size="sm">Repeat Last Schedule</Button>
+                      <h5>
+                        <i className="bi bi-person-lines-fill"></i> Request Pickup
+                      </h5>
+                      <Button variant="outline-secondary" size="sm" onClick={handleRepeatClick}>
+                        Repeat Last Schedule
+                      </Button>
                     </div>
+
+
+                    <Modal show={showModal} onHide={handleClose}>
+                      <Modal.Header closeButton>
+                        <Modal.Title>Last Order Details</Modal.Title>
+                      </Modal.Header>
+                      <Modal.Body>
+                        <p>
+                          <strong>Order ID:</strong> {lastOrder.id}
+                        </p>
+                        <p>
+                          <strong>Pickup Date:</strong> {lastOrder.pickupDate}
+                        </p>
+                        <p>
+                          <strong>Pickup Time:</strong> {lastOrder.pickupTime}
+                        </p>
+                        <p>
+                          <strong>Pickup Address:</strong> {lastOrder.address}
+                        </p>
+                        <p>
+                          <strong>Items:</strong>
+                        </p>
+                        <ul>
+                          {lastOrder.items.map((item, idx) => (
+                            <li key={idx}>
+                              {item.name} — Quantity: {item.quantity}
+                            </li>
+                          ))}
+                        </ul>
+                      </Modal.Body>
+                      <Modal.Footer>
+                        <Button variant="secondary" onClick={handleClose}>
+                          Close
+                        </Button>
+                        <Button variant="primary" onClick={handleReorder}>
+                          Reorder
+                        </Button>
+                      </Modal.Footer>
+                    </Modal>
 
                     <h6 className="mt-3">Select Service</h6>
                     <div className="row g-2">
@@ -620,169 +817,242 @@ const ProfilePage = () => {
             )}
 
             {activeTab === "order" && (
-              <Card className="mb-3 border-0 shadow-sm">
-                <Card.Body>
-                    <div className="d-flex justify-content-between align-items-start mb-3">
-                       <h5 className="mb-4"><i className="bi bi-cart"></i> My Order</h5>
-                    <select className="form-select form-select-sm w-auto">
-                        <option>All Orders</option>
-                        {/* Filter options */}
-                    </select>
-                    </div>
-
-                    {orders.map((order, index) => (
-                    <div key={index} className="border rounded p-3 mb-3 position-relative">
-                        <div className="d-flex justify-content-between align-items-start">
-                        <div>
-                            <h6 className="fw-bold mb-1">
-                            Order ID: <span className="text-dark">#{order.id}</span>
-                            </h6>
-                            <small className="text-muted">{order.services.join(", ")}</small>
-                        </div>
-                        <div className="dropdown">
-                            <button
-                                className="btn btn-sm btn-light text-danger p-1"
-                                type="button"
-                                id={`dropdownMenu-${index}`}
-                                data-bs-toggle="dropdown"
-                                aria-expanded="false"
+                  <>
+                    <Card>
+                      <Card.Body>
+                        <div className="d-flex justify-content-between align-items-center mb-3">
+                          <h5 className="mb-4">
+                            <i className="bi bi-cart"></i> My Order
+                          </h5>
+                           <select
+                              className="form-select form-select-sm w-auto"
+                              value={selectedStatus}
+                              onChange={e => setSelectedStatus(e.target.value)}
                             >
-                                <i className="bi bi-three-dots-vertical"></i>
-                            </button>
-                            <ul className="dropdown-menu" aria-labelledby={`dropdownMenu-${index}`}>
-                                <li>
-                                <button
-                                    type="button"
-                                    className="dropdown-item"
-                                    onClick={() => handleViewDetails(order)}
-                                >
-                                    View Details
-                                </button>
-                                </li>
-                            </ul>
+                              <option>All Orders</option>
+                              {Object.keys(statusVariant).map(status => (
+                                <option key={status} value={status}>
+                                  {status}
+                                </option>
+                              ))}
+                            </select>
                         </div>
 
+                        {paginatedOrders.map((order, index) => (
+                          <div
+                            key={index}
+                            className="border rounded p-3 mb-3 position-relative"
+                          >
+                            <div className="d-flex justify-content-between align-items-start">
+                              <div>
+                                <h6 className="fw-bold mb-1 d-flex align-items-center gap-2">
+                                  Order ID: <span className="text-dark">#{order.id}</span>
+                                  <span className={`badge bg-${statusVariant[order.status] || "secondary"}`}>
+                                    {order.status}
+                                  </span>
+                                </h6>
+                                <small className="text-muted">{order.services.join(", ")}</small>
+                              </div>
+                              <button
+                                type="button"
+                                className="btn btn-sm btn-outline-primary"
+                                onClick={() => handleViewDetails(order)}
+                              >
+                                View Details
+                              </button>
+                            </div>
 
-                        {modalOrder && (
-                            <Modal show={showModal} onHide={() => setShowModal(false)} centered>
-                                <Modal.Header closeButton>
-                                <Modal.Title>Order Details : #{modalOrder.id}</Modal.Title>
-                                </Modal.Header>
-                                <Modal.Body>
-                                <h6 className="fw-bold mb-3">Products</h6>
-                                <div className="d-flex gap-4 flex-wrap mb-4">
-                                    {modalOrder.products.map((item, idx) => (
-                                    <div key={idx} className="text-center border p-2 rounded" style={{ minWidth: '120px' }}>
-                                        {item.image && (
-                                        <img src={item.image} alt={item.name} height="40" className="mb-2" />
-                                        )}
-                                        <div className="fw-semibold">{item.name}</div>
-                                        <small className="text-muted">Qty: {item.quantity}</small><br />
-                                        <small className="text-muted">Price: ₹{item.price}</small><br />
-                                        <div className="text-success mt-1">₹{item.price * item.quantity}</div>
-                                    </div>
-                                    ))}
-                                </div>
+                            <div className="row mt-3">
+                              <div className="col-6">
+                                <div className="text-muted small">Pickup Day</div>
+                                <div className="fw-bold">{order.pickupDate}</div>
+                              </div>
+                              <div className="col-6">
+                                <div className="text-muted small">Pickup Time</div>
+                                <div className="fw-bold">{order.pickupTime}</div>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
 
-                                <h6 className="fw-bold mb-2">Payment Details</h6>
-                                {modalOrder.payment ? (
-                                    <div className="p-2 border rounded bg-light">
-                                    <div className="fw-semibold">Amount Paid: ₹{modalOrder.payment.amount}</div>
-                                    </div>
-                                ) : (
-                                    <div className="border p-3 text-danger rounded bg-light">
-                                    No payment details found.
-                                    </div>
+
+                        {/* Pagination */}
+                        <Pagination>
+                          <Pagination.First
+                            onClick={() => handlePageChange(1)}
+                            disabled={currentPage === 1}
+                          />
+                          <Pagination.Prev
+                            onClick={() => handlePageChange(currentPage - 1)}
+                            disabled={currentPage === 1}
+                          />
+
+                          {[...Array(totalPages)].map((_, i) => (
+                            <Pagination.Item
+                              key={i}
+                              active={currentPage === i + 1}
+                              onClick={() => handlePageChange(i + 1)}
+                            >
+                              {i + 1}
+                            </Pagination.Item>
+                          ))}
+
+                          <Pagination.Next
+                            onClick={() => handlePageChange(currentPage + 1)}
+                            disabled={currentPage === totalPages}
+                          />
+                          <Pagination.Last
+                            onClick={() => handlePageChange(totalPages)}
+                            disabled={currentPage === totalPages}
+                          />
+                        </Pagination>
+                      </Card.Body>
+                    </Card>
+
+                    {modalOrder && (
+                      <Modal show={showModal} onHide={handleCloseModal} centered>
+                        <Modal.Header closeButton>
+                          <Modal.Title>Order Details : #{modalOrder.id}</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                          <h6 className="fw-bold mb-2">Service</h6>
+                          <div className="mb-3 text-muted">{modalOrder.services.join(", ")}</div>
+
+                          <div className="mb-3 row">
+                            <div className="col-6">
+                              <small className="text-muted">Pickup Day</small>
+                              <div className="fw-bold">{modalOrder.pickupDate}</div>
+                            </div>
+                            <div className="col-6">
+                              <small className="text-muted">Pickup Time</small>
+                              <div className="fw-bold">{modalOrder.pickupTime}</div>
+                            </div>
+                          </div>
+
+                          <h6 className="fw-bold mb-3">Products</h6>
+                          <div className="d-flex gap-4 flex-wrap mb-4">
+                            {modalOrder.products.map((item, idx) => (
+                              <div
+                                key={idx}
+                                className="text-center border p-2 rounded"
+                                style={{ minWidth: "120px" }}
+                              >
+                                {item.image && (
+                                  <img
+                                    src={item.image}
+                                    alt={item.name}
+                                    height="40"
+                                    className="mb-2"
+                                  />
                                 )}
-
-                                <div className="mt-3 text-end fw-bold">
-                                    Total: ₹
-                                    {modalOrder.products.reduce((acc, item) => acc + item.price * item.quantity, 0)}
+                                <div className="fw-semibold">{item.name}</div>
+                                <small className="text-muted">Qty: {item.quantity}</small>
+                                <br />
+                                <small className="text-muted">Price: ₹{item.price}</small>
+                                <br />
+                                <div className="text-success mt-1">
+                                  ₹{item.price * item.quantity}
                                 </div>
-                                </Modal.Body>
-                            </Modal>
-                            )}
-                        </div>
+                              </div>
+                            ))}
+                          </div>
 
-                        <div className="row mt-3">
-                        <div className="col-6">
-                            <div className="text-muted small">Pickup Day</div>
-                            <div className="fw-bold">{order.pickupDate}</div>
-                        </div>
-                        <div className="col-6">
-                            <div className="text-muted small">Pickup Time</div>
-                            <div className="fw-bold">{order.pickupTime}</div>
-                        </div>
-                        </div>
-                    </div>
-                    ))}
-                </Card.Body>
-                </Card>
+                          <h6 className="fw-bold mb-2">Payment Details</h6>
+                          {modalOrder.status === "Delivered" ? (
+                            modalOrder.payment ? (
+                              <div className="p-2 border rounded bg-light">
+                                <div className="fw-semibold">
+                                  Amount Paid: ₹{modalOrder.payment.amount}
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="border p-3 text-danger rounded bg-light">
+                                No payment details found.
+                              </div>
+                            )
+                          ) : (
+                            <div className="text-muted fst-italic">
+                              Payment details will be shown after delivery.
+                            </div>
+                          )}
+
+                          <div className="mt-3 text-end fw-bold">
+                            Total: ₹
+                            {modalOrder.products.reduce(
+                              (acc, item) => acc + item.price * item.quantity,
+                              0
+                            )}
+                          </div>
+                        </Modal.Body>
+                      </Modal>
+                    )}
+                  </>
             )}
 
             {activeTab === "occasion" && (
-                <Card className="p-4 border-0 shadow-sm">
+                <Card>
                     <Card.Body>
-                        <div className="d-flex justify-content-between align-items-start mb-3"></div>
-                        <h5 className="mb-4"><i className="bi bi-calendar-event"></i> Occasional Service Request</h5>
-
-                        <p className="text-muted mb-4">
-                        Book special services for festivals, weddings, parties and more.
-                        </p>
-
-                        <form>
-                        <div className="mb-3">
-                            <label className="form-label fw-semibold">Occasion Type</label>
-                            <select className="form-select">
-                            <option value="">Select Occasion</option>
-                            <option>Wedding</option>
-                            <option>Festival</option>
-                            <option>Birthday</option>
-                            <option>House Party</option>
-                            <option>Other</option>
-                            </select>
+                        <div className="d-flex justify-content-between align-items-center mb-3">
+                          <h5><i className="bi bi-calendar-event"></i> Occasional Service Request</h5>
                         </div>
 
-                        <div className="row">
-                            <div className="mb-3 col-md-6">
-                            <label className="form-label fw-semibold">Preferred Date</label>
-                            <input type="date" className="form-control" />
-                            </div>
-                            <div className="mb-3 col-md-6">
-                            <label className="form-label fw-semibold">Preferred Time Slot</label>
-                            <select className="form-select">
-                                <option value="">Select Time</option>
-                                <option value="8am-10am">8am - 10am</option>
-                                <option value="10am-12pm">10am - 12pm</option>
-                                <option value="12pm-2pm">12pm - 2pm</option>
-                                <option value="2pm-4pm">2pm - 4pm</option>
-                                <option value="4pm-6pm">4pm - 6pm</option>
-                            </select>
-                            </div>
-                        </div>
+                          <p className="text-muted mb-4">
+                          Book special services for festivals, weddings, parties and more.
+                          </p>
 
-                        <div className="mb-3">
-                            <label className="form-label fw-semibold">Additional Notes</label>
-                            <textarea className="form-control" rows="3" placeholder="Any specific instructions or requests?" />
-                        </div>
+                          <form>
+                          <div className="mb-3">
+                              <label className="form-label fw-semibold">Occasion Type</label>
+                              <select className="form-select">
+                              <option value="">Select Occasion</option>
+                              <option>Wedding</option>
+                              <option>Festival</option>
+                              <option>Birthday</option>
+                              <option>House Party</option>
+                              <option>Other</option>
+                              </select>
+                          </div>
 
-                        <div className="text-end">
-                            <button type="submit" className="btn btn-primary px-4">
-                            Request Service
-                            </button>
-                        </div>
-                        </form>
+                          <div className="row">
+                              <div className="mb-3 col-md-6">
+                              <label className="form-label fw-semibold">Preferred Date</label>
+                              <input type="date" className="form-control" />
+                              </div>
+                              <div className="mb-3 col-md-6">
+                              <label className="form-label fw-semibold">Preferred Time Slot</label>
+                              <select className="form-select">
+                                  <option value="">Select Time</option>
+                                  <option value="8am-10am">8am - 10am</option>
+                                  <option value="10am-12pm">10am - 12pm</option>
+                                  <option value="12pm-2pm">12pm - 2pm</option>
+                                  <option value="2pm-4pm">2pm - 4pm</option>
+                                  <option value="4pm-6pm">4pm - 6pm</option>
+                              </select>
+                              </div>
+                          </div>
+
+                          <div className="mb-3">
+                              <label className="form-label fw-semibold">Additional Notes</label>
+                              <textarea className="form-control" rows="3" placeholder="Any specific instructions or requests?" />
+                          </div>
+
+                          <div className="text-end">
+                              <button type="submit" className="btn btn-primary px-4">
+                              Request Service
+                              </button>
+                          </div>
+                          </form>
                     </Card.Body>
                     </Card>
 
                 )}
 
                 {activeTab === "alteration" && (
-                <Card className="p-4 border-0 shadow-sm">
+                <Card>
                     <Card.Body>
-                        <div className="d-flex justify-content-between align-items-start mb-3"></div>
-                        <h5 className="mb-4"><i className="bi bi-tools"></i> Alteration Service Request</h5>
-
+                       <div className="d-flex justify-content-between align-items-center mb-3">
+                        <h5><i className="bi bi-tools"></i> Alteration Service Request</h5>
+                        </div>
                         
                         <p className="text-muted mb-4">
                         Request clothing alterations such as hemming, fitting, or repair.
@@ -858,10 +1128,11 @@ const ProfilePage = () => {
 
 
            {activeTab === "payment" && (
-                <Card className="p-3">
-                    <Card.Body>
-                    <h5 className="mb-4">💳 Payment Details</h5>
-
+                <Card>
+                   <Card.Body>
+                      <div className="d-flex justify-content-between align-items-center mb-3">
+                        <h5><i className="bi bi-credit-card"></i> Payment Details</h5>
+                      </div>
                     <div className="row mb-3">
                         <div className="col-md-6">
                         <div className="border rounded p-3 bg-light">
@@ -936,8 +1207,13 @@ const ProfilePage = () => {
 
 
             {activeTab === "setting" && (
-                <Card className="p-3">
+                <Card>
                     <Card.Body>
+                      <div className="d-flex justify-content-between align-items-center mb-3">
+                      <h5>
+                        <i className="bi bi-gear-fill"></i> Setting
+                      </h5>
+                    </div>
                     {/* Password Change */}
                     <div className="mb-4">
                         <h6 className="fw-semibold mb-3">Change Password</h6>
@@ -988,9 +1264,9 @@ const ProfilePage = () => {
 
 
            {activeTab === "delete" && (
-                <Card className="border-danger">
+                <Card>
                     <Card.Body>
-                    <h5 className="text-danger mb-3">⚠️ Delete Profile</h5>
+                    <h5> <i className="bi bi-trash-fill"></i> Delete Profile</h5>
 
                     <p className="text-muted">
                         This action will permanently delete your profile and all associated data. This cannot be undone.
