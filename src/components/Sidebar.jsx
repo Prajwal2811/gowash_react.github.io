@@ -26,10 +26,14 @@ const Sidebar = () => {
             <div className="bg-white rounded-circle mx-auto mb-2" style={{ width: '80px', height: '80px' }}>
               <i className="bi bi-person-fill text-danger fs-1"></i>
             </div>
-            <h5 className="card-title">Wasant Gawade</h5>
-            <p className="card-text small">1st Floor, RK Business Centre,<br />Dharampeth Extension, Shivaji Nagar, Nagpur, Maharashtra, India - 440010</p>
+            <h5 className="card-title">Anita Sharma</h5>
+            <p className="card-text small">
+              5th Avenue, Tower B,<br />
+              Andheri West, Mumbai, Maharashtra, India - 400053
+            </p>
           </Card.Body>
         </Card>
+
 
         <StatusItem icon="bi-envelope-fill" title="Verified Email" subtitle="24 May 2025 4:29 AM" />
         <StatusItem icon="bi-phone-fill" title="Verified Mobile Number" subtitle="2024-10-12 12:42:41" />
