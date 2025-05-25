@@ -44,38 +44,96 @@ const AppTabs = ({ activeTab, setActiveTab }) => {
   }, []);
 
   return (
-    <Container className="py-3 position-relative">
-      {showPrev && (
-        <button className="scroll-btn left" onClick={() => handleScroll("left")}>&#8592;</button>
-      )}
-      {showNext && (
-        <button className="scroll-btn right" onClick={() => handleScroll("right")}>&#8594;</button>
-      )}
-      <div className="scrollable-tabs-wrapper" ref={scrollRef}>
-        <ul
-          className="nav nav-pills nav-fill gap-2 p-2 rounded-2 flex-nowrap"
-          role="tablist"
-          style={{ whiteSpace: 'nowrap', marginBottom: 0 }}
-        >
-          {tabs.map((tab) => (
-            <li className="nav-item" role="presentation" key={tab.id}>
-              <button
-                className={`nav-link rounded-2 ${activeTab === tab.id ? "active" : ""}`}
-                onClick={() => setActiveTab(tab.id)}
-                type="button"
-                style={{
-                  backgroundColor: activeTab === tab.id ? '#0a3758' : 'transparent',
-                  color: activeTab === tab.id ? '#fff' : '#000',
-                }}
-              >
-                <i className={`fa-solid ${tab.icon} me-2`}></i>
-                {tab.label}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </Container>
+   <Container className="py-3 position-relative">
+  {/* Scroll Left Button */}
+  {showPrev && (
+    <button
+      className="scroll-btn left"
+      onClick={() => handleScroll("left")}
+      style={{
+        position: "absolute",
+        top: "50%",
+        left: 0,
+        transform: "translateY(-50%)",
+        zIndex: 10,
+        background: "#fff",
+        border: "none",
+        padding: "0.5rem 0.75rem",
+        fontSize: "1.2rem",
+        cursor: "pointer",
+        boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
+        borderRadius: "0.5rem",
+      }}
+    >
+      &#8592;
+    </button>
+  )}
+
+  {/* Scrollable Tab List */}
+  <div
+    className="scrollable-tabs-wrapper"
+    ref={scrollRef}
+    style={{
+      overflowX: "auto",
+      scrollbarWidth: "none",
+      msOverflowStyle: "none",
+    }}
+  >
+    <ul
+      className="nav nav-pills nav-fill gap-2 p-2 rounded-2 flex-nowrap d-flex"
+      role="tablist"
+      style={{
+        whiteSpace: "nowrap",
+        marginBottom: 0,
+        minWidth: "max-content",
+      }}
+    >
+      {tabs.map((tab) => (
+        <li className="nav-item" role="presentation" key={tab.id}>
+          <button
+            className={`nav-link rounded-2 ${activeTab === tab.id ? "active" : ""}`}
+            onClick={() => setActiveTab(tab.id)}
+            type="button"
+            style={{
+              backgroundColor: activeTab === tab.id ? "#0a3758" : "transparent",
+              color: activeTab === tab.id ? "#fff" : "#000",
+              whiteSpace: "nowrap",
+              minWidth: 120,
+            }}
+          >
+            <i className={`fa-solid ${tab.icon} me-2`}></i>
+            {tab.label}
+          </button>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  {/* Scroll Right Button */}
+  {showNext && (
+    <button
+      className="scroll-btn right"
+      onClick={() => handleScroll("right")}
+      style={{
+        position: "absolute",
+        top: "50%",
+        right: 0,
+        transform: "translateY(-50%)",
+        zIndex: 10,
+        background: "#fff",
+        border: "none",
+        padding: "0.5rem 0.75rem",
+        fontSize: "1.2rem",
+        cursor: "pointer",
+        boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
+        borderRadius: "0.5rem",
+      }}
+    >
+      &#8594;
+    </button>
+  )}
+</Container>
+
   );
 };
 
