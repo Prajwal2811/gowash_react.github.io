@@ -1,18 +1,13 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import { Container, Row, Col, Button, Form, Card, ProgressBar, Modal, Badge, Navbar, Nav, Pagination  } from 'react-bootstrap';
-import { BiRepeat, BiUndo } from "react-icons/bi";
-
-
-import { Dropdown } from 'react-bootstrap';
-
 import React, { useRef, useState, useEffect } from "react";
-// import { Container } from "react-bootstrap";
+import { Dropdown, Container, Row, Col, Button, Form, Card, ProgressBar, Modal, Badge, Navbar, Nav, Pagination  } from 'react-bootstrap';
+
+
+
 const ProfilePage = () => {
     const currencies = ['INR', 'USD', 'EUR', 'GBP', 'JPY'];
-
-
     const [selectedCurrency, setSelectedCurrency] = useState('INR');
     const [activeTab, setActiveTab] = useState("profile");
     const scrollRef = useRef();
@@ -97,224 +92,219 @@ const ProfilePage = () => {
     };
 
     const timeSlots = [
-    { label: "8am - 10am", start: 8, end: 10 },
-    { label: "10am - 12pm", start: 10, end: 12 },
-    { label: "12pm - 2pm", start: 12, end: 14 },
-    { label: "2pm - 4pm", start: 14, end: 16 },
-    { label: "4pm - 6pm", start: 16, end: 18 },
+      { label: "8am - 10am", start: 8, end: 10 },
+      { label: "10am - 12pm", start: 10, end: 12 },
+      { label: "12pm - 2pm", start: 12, end: 14 },
+      { label: "2pm - 4pm", start: 14, end: 16 },
+      { label: "4pm - 6pm", start: 16, end: 18 },
     ];
+    
+    // Sample dummy orders with statuses
+    const [orders] = useState([
+      {
+        id: 101,
+        services: ["Wash & Iron", "Dry Cleaning"],
+        pickupDate: "2025-05-24",
+        pickupTime: "8am - 10am",
+        status: "New order",
+        products: [
+          { name: "Shirt", quantity: 2, price: 50, image: "" },
+          { name: "Trousers", quantity: 1, price: 80, image: "" },
+        ],
+        payment: null,
+      },
+      {
+        id: 102,
+        services: ["Iron Only"],
+        pickupDate: "2025-05-25",
+        pickupTime: "10am - 12pm",
+        status: "Accepted",
+        products: [{ name: "Shirt", quantity: 3, price: 50, image: "" }],
+        payment: null,
+      },
+      {
+        id: 103,
+        services: ["Dry Cleaning"],
+        pickupDate: "2025-05-25",
+        pickupTime: "12pm - 2pm",
+        status: "Picked Up",
+        products: [{ name: "Jacket", quantity: 1, price: 120, image: "" }],
+        payment: null,
+      },
+      {
+        id: 104,
+        services: ["Wash & Fold"],
+        pickupDate: "2025-05-26",
+        pickupTime: "2pm - 4pm",
+        status: "In Cleaning",
+        products: [{ name: "Jeans", quantity: 4, price: 80, image: "" }],
+        payment: null,
+      },
+      {
+        id: 105,
+        services: ["Wash & Iron"],
+        pickupDate: "2025-05-26",
+        pickupTime: "4pm - 6pm",
+        status: "Out for Delivery",
+        products: [
+          { name: "Shirt", quantity: 1, price: 50, image: "" },
+          { name: "Trousers", quantity: 2, price: 80, image: "" },
+        ],
+        payment: null,
+      },
+      {
+        id: 106,
+        services: ["Dry Cleaning"],
+        pickupDate: "2025-05-27",
+        pickupTime: "8am - 10am",
+        status: "Due",
+        products: [{ name: "Coat", quantity: 1, price: 150, image: "" }],
+        payment: null,
+      },
+      {
+        id: 107,
+        services: ["Wash & Iron"],
+        pickupDate: "2025-05-27",
+        pickupTime: "10am - 12pm",
+        status: "Canceled",
+        products: [{ name: "Shirt", quantity: 2, price: 50, image: "" }],
+        payment: null,
+      },
+      {
+        id: 108,
+        services: ["Wash & Fold"],
+        pickupDate: "2025-05-26",
+        pickupTime: "9:00 AM - 11:00 AM",
+        status: "Delivered",
+        products: [{ name: "Jeans", quantity: 4, price: 80, image: "" }],
+        payment: { amount: 320 },
+      },
+    ]);
 
 
+    const [modalOrder, setModalOrder] = useState(null);
+    const [showModal, setShowModal] = useState(false);
 
-       
+      // Pagination state
+      const itemsPerPage = 3;
+      const [currentPage, setCurrentPage] = useState(1);
+      const totalPages = Math.ceil(orders.length / itemsPerPage);
 
+      // Get orders for current page
+      const paginatedOrders = orders.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+      );
 
-        // Sample dummy orders with statuses
-       const [orders] = useState([
-        {
-          id: 101,
-          services: ["Wash & Iron", "Dry Cleaning"],
-          pickupDate: "2025-05-24",
-          pickupTime: "8am - 10am",
-          status: "New order",
-          products: [
-            { name: "Shirt", quantity: 2, price: 50, image: "" },
-            { name: "Trousers", quantity: 1, price: 80, image: "" },
-          ],
-          payment: null,
-        },
-        {
-          id: 102,
-          services: ["Iron Only"],
-          pickupDate: "2025-05-25",
-          pickupTime: "10am - 12pm",
-          status: "Accepted",
-          products: [{ name: "Shirt", quantity: 3, price: 50, image: "" }],
-          payment: null,
-        },
-        {
-          id: 103,
-          services: ["Dry Cleaning"],
-          pickupDate: "2025-05-25",
-          pickupTime: "12pm - 2pm",
-          status: "Picked Up",
-          products: [{ name: "Jacket", quantity: 1, price: 120, image: "" }],
-          payment: null,
-        },
-        {
-          id: 104,
-          services: ["Wash & Fold"],
-          pickupDate: "2025-05-26",
-          pickupTime: "2pm - 4pm",
-          status: "In Cleaning",
-          products: [{ name: "Jeans", quantity: 4, price: 80, image: "" }],
-          payment: null,
-        },
-        {
-          id: 105,
-          services: ["Wash & Iron"],
-          pickupDate: "2025-05-26",
-          pickupTime: "4pm - 6pm",
-          status: "Out for Delivery",
-          products: [
-            { name: "Shirt", quantity: 1, price: 50, image: "" },
-            { name: "Trousers", quantity: 2, price: 80, image: "" },
-          ],
-          payment: null,
-        },
-        {
-          id: 106,
-          services: ["Dry Cleaning"],
-          pickupDate: "2025-05-27",
-          pickupTime: "8am - 10am",
-          status: "Due",
-          products: [{ name: "Coat", quantity: 1, price: 150, image: "" }],
-          payment: null,
-        },
-        {
-          id: 107,
-          services: ["Wash & Iron"],
-          pickupDate: "2025-05-27",
-          pickupTime: "10am - 12pm",
-          status: "Canceled",
-          products: [{ name: "Shirt", quantity: 2, price: 50, image: "" }],
-          payment: null,
-        },
-        {
-          id: 108,
-          services: ["Wash & Fold"],
-          pickupDate: "2025-05-26",
-          pickupTime: "9:00 AM - 11:00 AM",
-          status: "Delivered",
-          products: [{ name: "Jeans", quantity: 4, price: 80, image: "" }],
-          payment: { amount: 320 },
-        },
-      ]);
-
-
-       const [modalOrder, setModalOrder] = useState(null);
-        const [showModal, setShowModal] = useState(false);
-
-        // Pagination state
-        const itemsPerPage = 3;
-        const [currentPage, setCurrentPage] = useState(1);
-        const totalPages = Math.ceil(orders.length / itemsPerPage);
-
-        // Get orders for current page
-        const paginatedOrders = orders.slice(
-          (currentPage - 1) * itemsPerPage,
-          currentPage * itemsPerPage
-        );
-
-        const handleViewDetails = (order) => {
-          setModalOrder(order);
-          setShowModal(true);
-        };
-
-        const handleCloseModal = () => {
-          setShowModal(false);
-          setModalOrder(null);
-        };
-
-        const handlePageChange = (page) => {
-          setCurrentPage(page);
-        };
-
-        // Badge color based on status
-        const statusVariant = {
-        "New Order": "secondary",
-        "Accepted": "info",
-        "Picked Up": "primary",
-        "In Cleaning": "warning",
-        "Out for Delivery": "success",
-        "Due": "danger",
-        "Canceled": "dark",
+      const handleViewDetails = (order) => {
+        setModalOrder(order);
+        setShowModal(true);
       };
+
+      const handleCloseModal = () => {
+        setShowModal(false);
+        setModalOrder(null);
+      };
+
+      const handlePageChange = (page) => {
+        setCurrentPage(page);
+      };
+
+      // Badge color based on status
+      const statusVariant = {
+      "New Order": "secondary",
+      "Accepted": "info",
+      "Picked Up": "primary",
+      "In Cleaning": "warning",
+      "Out for Delivery": "success",
+      "Due": "danger",
+      "Canceled": "dark",
+    };
       
 
-        const [selectedStatus, setSelectedStatus] = React.useState("All Orders");
+      const [selectedStatus, setSelectedStatus] = React.useState("All Orders");
 
-        const [showDeleteModal, setShowDeleteModal] = useState(false);
+      const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-        const handleDeleteProfile = () => {
-        setShowDeleteModal(false);
-        // Add your deletion logic here, e.g. API call
-        console.log("Profile deleted");
-        };
-
-
+      const handleDeleteProfile = () => {
+      setShowDeleteModal(false);
+      // Add your deletion logic here, e.g. API call
+      console.log("Profile deleted");
+      };
 
 
-        const [showExpressModal, setShowExpressModal] = useState(false);
-
-        const [showConfirmModal, setShowConfirmModal] = useState(false);
-
-        const resetForm = () => {
-            setSelectedServices([]);
-            setSelectedDay(null);
-            setSelectedTime("");
-            setExpressDelivery(false);
-            setShowExpressModal(false);
-            setShowConfirmModal(false);
-        };
 
 
-         const fileInputRef = useRef();
+      const [showExpressModal, setShowExpressModal] = useState(false);
 
-        const handleFileSelect = () => {
-            fileInputRef.current.click();
-        };
+      const [showConfirmModal, setShowConfirmModal] = useState(false);
 
-        const handleFileChange = (e) => {
-            const file = e.target.files[0];
-            if (file) {
-            console.log("Selected file:", file);
-            // You can add preview or upload logic here
-            }
-        };
-
-
-         const [notifications, setNotifications] = useState(3); // example count
-        const [showDropdown, setShowDropdown] = useState(false);
-
-        const toggleDropdown = () => {
-            setShowDropdown(!showDropdown);
-            // Optionally clear notifications when opening dropdown:
-            if (!showDropdown) setNotifications(0);
-        };
+      const resetForm = () => {
+          setSelectedServices([]);
+          setSelectedDay(null);
+          setSelectedTime("");
+          setExpressDelivery(false);
+          setShowExpressModal(false);
+          setShowConfirmModal(false);
+      };
 
 
-         // Dummy last order data - replace with your actual last order data
-        const lastOrder = {
-          id: 12345,
-          pickupDate: "2025-05-24",
-          pickupTime: "10:00 AM - 12:00 PM",
-          address: "123, Main Street, Your City",
-          items: [
-            { name: "Laundry", quantity: 3 },
-            { name: "Dry Cleaning", quantity: 2 },
-          ],
-        };
+      const fileInputRef = useRef();
 
-        const handleRepeatClick = () => {
-          setShowModal(true);
-        };
+      const handleFileSelect = () => {
+          fileInputRef.current.click();
+      };
 
-        const handleClose = () => {
-          setShowModal(false);
-        };
-
-        const handleReorder = () => {
-          // Add reorder logic here - e.g. call API or navigate to order confirmation page
-          setShowModal(false);
-        };
+      const handleFileChange = (e) => {
+          const file = e.target.files[0];
+          if (file) {
+          console.log("Selected file:", file);
+          // You can add preview or upload logic here
+          }
+      };
 
 
-         const [showUpgradeInfo, setShowUpgradeInfo] = useState(false);
+      const [notifications, setNotifications] = useState(3); // example count
+      const [showDropdown, setShowDropdown] = useState(false);
 
-        const handleUpgradeClick = () => {
-          setShowUpgradeInfo(true);
-        };
+      const toggleDropdown = () => {
+          setShowDropdown(!showDropdown);
+          // Optionally clear notifications when opening dropdown:
+          if (!showDropdown) setNotifications(0);
+      };
+
+
+        // Dummy last order data - replace with your actual last order data
+      const lastOrder = {
+        id: 12345,
+        pickupDate: "2025-05-24",
+        pickupTime: "10:00 AM - 12:00 PM",
+        address: "123, Main Street, Your City",
+        items: [
+          { name: "Laundry", quantity: 3 },
+          { name: "Dry Cleaning", quantity: 2 },
+        ],
+      };
+
+      const handleRepeatClick = () => {
+        setShowModal(true);
+      };
+
+      const handleClose = () => {
+        setShowModal(false);
+      };
+
+      const handleReorder = () => {
+        // Add reorder logic here - e.g. call API or navigate to order confirmation page
+        setShowModal(false);
+      };
+
+
+      const [showUpgradeInfo, setShowUpgradeInfo] = useState(false);
+
+      const handleUpgradeClick = () => {
+        setShowUpgradeInfo(true);
+      };
 
   return (
     <div className="bg-white min-vh-100">
@@ -326,8 +316,6 @@ const ProfilePage = () => {
               GoWash
               </span>
           </Navbar.Brand>
-
-
         {/* Center: Nav Links */}
           <Nav className="flex-grow-1 justify-content-center gap-4 fw-semibold">
               <Nav.Link href="#" className="text-dark">Home</Nav.Link>
@@ -336,149 +324,156 @@ const ProfilePage = () => {
               <Nav.Link href="#" className="text-dark">Contact Us</Nav.Link>
           </Nav>
 
-        {/* Right Side Buttons */}
-        <div className="d-flex align-items-center gap-3">
-          <Dropdown>
-              <Dropdown.Toggle
-                  variant="light"
-                  className="rounded-3 fw-semibold px-3 py-2"
-                  id="currency-dropdown"
+          {/* Right Side Buttons */}
+          <div className="d-flex align-items-center gap-3">
+            <Dropdown>
+                <Dropdown.Toggle
+                    variant="light"
+                    className="rounded-3 fw-semibold px-3 py-2"
+                    id="currency-dropdown"
+                >
+                    {selectedCurrency}
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu>
+                    {currencies.map(currency => (
+                    <Dropdown.Item
+                        key={currency}
+                        active={currency === selectedCurrency}
+                        onClick={() => setSelectedCurrency(currency)}
+                    >
+                        {currency}
+                    </Dropdown.Item>
+                    ))}
+                </Dropdown.Menu>
+                </Dropdown>
+
+            <div style={{ position: "relative", display: "inline-block" }}>
+          <Button
+            variant="light"
+            className="rounded-3 p-2"
+            onClick={toggleDropdown}
+          >
+            <i className="bi bi-bell"></i>
+            {notifications > 0 && (
+              <Badge
+                bg="danger"
+                pill
+                style={{
+                  position: "absolute",
+                  top: 4,
+                  right: 4,
+                  fontSize: "0.6rem",
+                }}
               >
-                  {selectedCurrency}
-              </Dropdown.Toggle>
+                {notifications}
+              </Badge>
+            )}
+          </Button>
 
-              <Dropdown.Menu>
-                  {currencies.map(currency => (
-                  <Dropdown.Item
-                      key={currency}
-                      active={currency === selectedCurrency}
-                      onClick={() => setSelectedCurrency(currency)}
-                  >
-                      {currency}
-                  </Dropdown.Item>
-                  ))}
-              </Dropdown.Menu>
-              </Dropdown>
-
-          <div style={{ position: "relative", display: "inline-block" }}>
-        <Button
-          variant="light"
-          className="rounded-3 p-2"
-          onClick={toggleDropdown}
-        >
-          <i className="bi bi-bell"></i>
-          {notifications > 0 && (
-            <Badge
-              bg="danger"
-              pill
+          {showDropdown && (
+            <div
               style={{
                 position: "absolute",
-                top: 4,
-                right: 4,
-                fontSize: "0.6rem",
+                right: 0,
+                marginTop: 8,
+                width: 250,
+                background: "white",
+                border: "1px solid #ccc",
+                borderRadius: 6,
+                boxShadow: "0 2px 10px rgba(0,0,0,0.15)",
+                zIndex: 1000,
               }}
             >
-              {notifications}
-            </Badge>
+              <div style={{ padding: 12 }}>
+                <strong>Notifications</strong>
+              </div>
+              <hr style={{ margin: 0 }} />
+              <div style={{ maxHeight: 150, overflowY: "auto" }}>
+                {notifications === 0 ? (
+                  <div style={{ padding: 12, color: "#666" }}>
+                    No new notifications
+                  </div>
+                ) : (
+                  <>
+                    <div style={{ padding: 12 }}>Notification 1</div>
+                    <div style={{ padding: 12 }}>Notification 2</div>
+                    <div style={{ padding: 12 }}>Notification 3</div>
+                  </>
+                )}
+              </div>
+            </div>
           )}
-        </Button>
-
-        {showDropdown && (
-          <div
-            style={{
-              position: "absolute",
-              right: 0,
-              marginTop: 8,
-              width: 250,
-              background: "white",
-              border: "1px solid #ccc",
-              borderRadius: 6,
-              boxShadow: "0 2px 10px rgba(0,0,0,0.15)",
-              zIndex: 1000,
-            }}
-          >
-            <div style={{ padding: 12 }}>
-              <strong>Notifications</strong>
-            </div>
-            <hr style={{ margin: 0 }} />
-            <div style={{ maxHeight: 150, overflowY: "auto" }}>
-              {notifications === 0 ? (
-                <div style={{ padding: 12, color: "#666" }}>
-                  No new notifications
-                </div>
-              ) : (
-                <>
-                  <div style={{ padding: 12 }}>Notification 1</div>
-                  <div style={{ padding: 12 }}>Notification 2</div>
-                  <div style={{ padding: 12 }}>Notification 3</div>
-                </>
-              )}
-            </div>
-          </div>
-        )}
-      </div>
-
-          {/* Profile Dropdown */}
-          <Dropdown align="end">
-              <Dropdown.Toggle
-                variant="transparent"
-                id="profileDropdown"
-                className="rounded-circle p-2"
-                style={{ cursor: 'pointer', border: 'none' }}
-              >
-                <i className="bi bi-person-fill fs-5"></i>
-              </Dropdown.Toggle>
-
-              <Dropdown.Menu>
-                <Dropdown.Item href="#">My Profile</Dropdown.Item>
-                <Dropdown.Item href="#">Orders</Dropdown.Item>
-                <Dropdown.Item href="#">Settings</Dropdown.Item>
-                <Dropdown.Divider />
-                <Dropdown.Item href="#" className="text-danger">Logout</Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
         </div>
+
+            {/* Profile Dropdown */}
+            <Dropdown align="end">
+                <Dropdown.Toggle
+                  variant="transparent"
+                  id="profileDropdown"
+                  className="rounded-circle p-2"
+                  style={{ cursor: 'pointer', border: 'none' }}
+                >
+                  <i className="bi bi-person-fill fs-5"></i>
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu>
+                  <Dropdown.Item href="#">My Profile</Dropdown.Item>
+                  <Dropdown.Item href="#">Orders</Dropdown.Item>
+                  <Dropdown.Item href="#">Settings</Dropdown.Item>
+                  <Dropdown.Divider />
+                  <Dropdown.Item href="#" className="text-danger">Logout</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+          </div>
       </Navbar>
 
 
-      {/* Tabs */}
+        {/* Tabs */}
         <Container className="py-3 position-relative">
-      {showPrev && (
-        <button className="scroll-btn left" onClick={() => handleScroll("left")}>
-          &#8592;
-        </button>
-      )}
-      {showNext && (
-        <button className="scroll-btn right" onClick={() => handleScroll("right")}>
-          &#8594;
-        </button>
-      )}
-      <div className="scrollable-tabs-wrapper" ref={scrollRef}>
-        <ul className="nav nav-pills nav-fill gap-2 p-2 rounded-2 bg-light flex-nowrap" role="tablist" style={{ whiteSpace: 'nowrap', marginBottom: 0 }}>
-          {[
-            { id: "profile", icon: "fa-id-card", label: "My Profile" },
-            { id: "pickup", icon: "fa-user-group", label: "Request Pickup" },
-            { id: "order", icon: "fa-ticket", label: "My Order" },
-            { id: "occasion", icon: "fa-ticket", label: "Occasional Service" },
-            { id: "alteration", icon: "fa-ticket", label: "Alteration Service" },
-            { id: "payment", icon: "fa-wallet", label: "Payment Details" },
-            { id: "setting", icon: "fa-sliders", label: "Setting" },
-            { id: "delete", icon: "fa-trash-can", label: "Delete Profile" },
-          ].map((tab) => (
-            <li className="nav-item" role="presentation" key={tab.id}>
-              <button
-                className={`nav-link rounded-2 ${activeTab === tab.id ? "active" : ""}`}
-                onClick={() => setActiveTab(tab.id)}
-                type="button"
-              >
-                <i className={`fa-solid ${tab.icon} me-2`}></i>
-                {tab.label}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </Container>
+        {showPrev && (
+          <button className="scroll-btn left" onClick={() => handleScroll("left")}>
+            &#8592;
+          </button>
+        )}
+        {showNext && (
+          <button className="scroll-btn right" onClick={() => handleScroll("right")}>
+            &#8594;
+          </button>
+        )}
+        <div className="scrollable-tabs-wrapper" ref={scrollRef}>
+          <ul className="nav nav-pills nav-fill gap-2 p-2 rounded-2 flex-nowrap"
+              role="tablist"
+              style={{ whiteSpace: 'nowrap', marginBottom: 0 }}>
+              {[
+                { id: "profile", icon: "fa-id-card", label: "My Profile" },
+                { id: "pickup", icon: "fa-user-group", label: "Request Pickup" },
+                { id: "order", icon: "fa-ticket", label: "My Order" },
+                { id: "occasion", icon: "fa-ticket", label: "Occasional Service" },
+                { id: "alteration", icon: "fa-ticket", label: "Alteration Service" },
+                { id: "payment", icon: "fa-wallet", label: "Payment Details" },
+                { id: "setting", icon: "fa-sliders", label: "Setting" },
+                { id: "delete", icon: "fa-trash-can", label: "Delete Profile" },
+              ].map((tab) => (
+                <li className="nav-item" role="presentation" key={tab.id}>
+                  <button
+                    className={`nav-link rounded-2 ${activeTab === tab.id ? "active" : ""}`}
+                    onClick={() => setActiveTab(tab.id)}
+                    type="button"
+                    style={{
+                      backgroundColor: activeTab === tab.id ? '#0a3758' : 'transparent',
+                      color: activeTab === tab.id ? '#fff' : '#000',
+                    }}
+                  >
+                    <i className={`fa-solid ${tab.icon} me-2`}></i>
+                    {tab.label}
+                  </button>
+                </li>
+              ))}
+            </ul>
+
+        </div>
+        </Container>
 
 
       {/* Page Body */}
@@ -520,7 +515,7 @@ const ProfilePage = () => {
                     ✅ Early access to new features <br />
                     <strong>Only ₹499/month</strong>
                   </Card.Text>
-                  <Button variant="primary">Subscribe Now</Button>
+                  <Button style={{ backgroundColor:  '#0a3758', color: '#fff' }} >Subscribe Now</Button>
                 </Card.Body>
               </Card>
             )}
@@ -589,7 +584,8 @@ const ProfilePage = () => {
                       <Form.Label>Address</Form.Label>
                       <Form.Control as="textarea" rows={3} defaultValue="1st Floor, RK Business Centre, Dharampeth Extension, Shivaji Nagar, Nagpur, Maharashtra, India - 440010" />
                     </Form.Group>
-                    <Button variant="primary">Update Details</Button>
+                    <Button style={{ backgroundColor:  '#0a3758', color: '#fff' }}  variant="primary">Update Details</Button>
+                    
                   </Form>
                 </Card.Body>
               </Card>
@@ -602,7 +598,7 @@ const ProfilePage = () => {
                       <h5>
                         <i className="bi bi-person-lines-fill"></i> Request Pickup
                       </h5>
-                      <Button variant="outline-secondary" size="sm" onClick={handleRepeatClick}>
+                      <Button variant="outline-secondary"  size="sm" onClick={handleRepeatClick}>
                         Repeat Last Schedule
                       </Button>
                     </div>
@@ -640,7 +636,7 @@ const ProfilePage = () => {
                         <Button variant="secondary" onClick={handleClose}>
                           Close
                         </Button>
-                        <Button variant="primary" onClick={handleReorder}>
+                        <Button style={{ backgroundColor:  '#0a3758', color: '#fff' }}   variant="primary" onClick={handleReorder}>
                           Reorder
                         </Button>
                       </Modal.Footer>
@@ -650,11 +646,12 @@ const ProfilePage = () => {
                     <div className="row g-2">
                     {servicesList.map((service, i) => (
                         <div className="col-6 col-md-3" key={i}>
-                        <button
-                            className={`btn w-100 ${selectedServices.includes(service) ? "btn-outline-primary" : "btn-light"}`}
-                            onClick={() => toggleService(service)}
+                        <button 
+                          className={`btn w-100 ${selectedServices.includes(service) ? 'text-white' : 'btn-light'}`}
+                          style={selectedServices.includes(service) ? { backgroundColor: '#0a3758' } : {}}
+                          onClick={() => toggleService(service)}
                         >
-                            {service}
+                          {service}
                         </button>
                         </div>
                     ))}
@@ -666,11 +663,13 @@ const ProfilePage = () => {
                         {days.map((day, i) => (
                             <div className="col-6 col-md-4 col-lg-3" key={i}>
                             <button
-                                className={`btn w-100 ${selectedDay === day.value ? "btn-outline-primary" : "btn-light"}`}
-                                onClick={() => setSelectedDay(day.value)}
+                              className={`btn w-100 ${selectedDay === day.value ? "text-white" : "btn-light"}`}
+                              style={selectedDay === day.value ? { backgroundColor: '#0a3758' } : {}}
+                              onClick={() => setSelectedDay(day.value)}
                             >
-                                {day.label}
+                              {day.label}
                             </button>
+
                             </div>
                         ))}
                     </div>
@@ -681,11 +680,13 @@ const ProfilePage = () => {
                     {getFilteredTimeSlots().map((time, i) => (
                         <div className="col-6 col-md-4 col-lg-3" key={i}>
                         <button
-                            className={`btn w-100 ${selectedTime === time.label ? "btn-outline-primary" : "btn-light"}`}
-                            onClick={() => setSelectedTime(time.label)}
+                          className={`btn w-100 ${selectedTime === time.label ? "text-white" : "btn-light"}`}
+                          style={selectedTime === time.label ? { backgroundColor: '#0a3758' } : {}}
+                          onClick={() => setSelectedTime(time.label)}
                         >
-                            {time.label}
+                          {time.label}
                         </button>
+
                         </div>
                     ))}
                     </div>
@@ -761,7 +762,7 @@ const ProfilePage = () => {
                     <i className="bi bi-arrow-counterclockwise"></i>
                     </Button>
 
-                    <Button variant="primary" onClick={() => setShowConfirmModal(true)}>
+                    <Button style={{ backgroundColor:  '#0a3758', color: '#fff' }}   variant="primary" onClick={() => setShowConfirmModal(true)}>
                     Schedule
                     </Button>
                     {showConfirmModal && (
@@ -793,11 +794,9 @@ const ProfilePage = () => {
                                 Cancel
                                 </Button>
                                 <Button
-                                variant="primary"
+                                variant="primary" style={{ backgroundColor:  '#0a3758', color: '#fff' }}  
                                 onClick={() => {
                                     setShowConfirmModal(false);
-                                    // You can trigger actual form submission or API call here
-                                    alert("Pickup Scheduled Successfully!");
                                 }}
                                 >
                                 Confirm & Schedule
@@ -854,7 +853,7 @@ const ProfilePage = () => {
                                 <small className="text-muted">{order.services.join(", ")}</small>
                               </div>
                               <button
-                                type="button"
+                                type="button" style={{ backgroundColor:  '#0a3758', color: '#fff' }}  
                                 className="btn btn-sm btn-outline-primary"
                                 onClick={() => handleViewDetails(order)}
                               >
@@ -1037,7 +1036,7 @@ const ProfilePage = () => {
                           </div>
 
                           <div className="text-end">
-                              <button type="submit" className="btn btn-primary px-4">
+                              <button style={{ backgroundColor:  '#0a3758', color: '#fff' }}   type="submit" className="btn btn-primary px-4">
                               Request Service
                               </button>
                           </div>
@@ -1045,86 +1044,86 @@ const ProfilePage = () => {
                     </Card.Body>
                     </Card>
 
-                )}
+            )}
 
-                {activeTab === "alteration" && (
-                <Card>
-                    <Card.Body>
-                       <div className="d-flex justify-content-between align-items-center mb-3">
-                        <h5><i className="bi bi-tools"></i> Alteration Service Request</h5>
+            {activeTab === "alteration" && (
+            <Card>
+                <Card.Body>
+                    <div className="d-flex justify-content-between align-items-center mb-3">
+                    <h5><i className="bi bi-tools"></i> Alteration Service Request</h5>
+                    </div>
+                    
+                    <p className="text-muted mb-4">
+                    Request clothing alterations such as hemming, fitting, or repair.
+                    </p>
+
+                    <form>
+                    <div className="mb-3">
+                        <label className="form-label fw-semibold">Alteration Type</label>
+                        <select className="form-select">
+                        <option value="">Select Alteration</option>
+                        <option>Length Adjustment</option>
+                        <option>Sleeve Alteration</option>
+                        <option>Waist Fitting</option>
+                        <option>Button/Zipper Repair</option>
+                        <option>Patchwork</option>
+                        </select>
+                    </div>
+
+                    <div className="mb-3">
+                        <label className="form-label fw-semibold">Garment Type</label>
+                        <select className="form-select">
+                        <option value="">Select Garment</option>
+                        <option>Shirt</option>
+                        <option>Pants</option>
+                        <option>Dress</option>
+                        <option>Jacket</option>
+                        <option>Other</option>
+                        </select>
+                    </div>
+
+                    <div className="row">
+                        <div className="mb-3 col-md-6">
+                        <label className="form-label fw-semibold">Preferred Pickup Date</label>
+                        <input type="date" className="form-control" />
                         </div>
-                        
-                        <p className="text-muted mb-4">
-                        Request clothing alterations such as hemming, fitting, or repair.
-                        </p>
-
-                        <form>
-                        <div className="mb-3">
-                            <label className="form-label fw-semibold">Alteration Type</label>
-                            <select className="form-select">
-                            <option value="">Select Alteration</option>
-                            <option>Length Adjustment</option>
-                            <option>Sleeve Alteration</option>
-                            <option>Waist Fitting</option>
-                            <option>Button/Zipper Repair</option>
-                            <option>Patchwork</option>
-                            </select>
+                        <div className="mb-3 col-md-6">
+                        <label className="form-label fw-semibold">Preferred Time</label>
+                        <select className="form-select">
+                            <option value="">Select Time</option>
+                            <option value="8am-10am">8am - 10am</option>
+                            <option value="10am-12pm">10am - 12pm</option>
+                            <option value="12pm-2pm">12pm - 2pm</option>
+                            <option value="2pm-4pm">2pm - 4pm</option>
+                            <option value="4pm-6pm">4pm - 6pm</option>
+                        </select>
                         </div>
+                    </div>
 
-                        <div className="mb-3">
-                            <label className="form-label fw-semibold">Garment Type</label>
-                            <select className="form-select">
-                            <option value="">Select Garment</option>
-                            <option>Shirt</option>
-                            <option>Pants</option>
-                            <option>Dress</option>
-                            <option>Jacket</option>
-                            <option>Other</option>
-                            </select>
-                        </div>
+                    <div className="mb-3">
+                        <label className="form-label fw-semibold">Additional Instructions</label>
+                        <textarea className="form-control" rows="3" placeholder="Describe your alteration needs..." />
+                    </div>
 
-                        <div className="row">
-                            <div className="mb-3 col-md-6">
-                            <label className="form-label fw-semibold">Preferred Pickup Date</label>
-                            <input type="date" className="form-control" />
-                            </div>
-                            <div className="mb-3 col-md-6">
-                            <label className="form-label fw-semibold">Preferred Time</label>
-                            <select className="form-select">
-                                <option value="">Select Time</option>
-                                <option value="8am-10am">8am - 10am</option>
-                                <option value="10am-12pm">10am - 12pm</option>
-                                <option value="12pm-2pm">12pm - 2pm</option>
-                                <option value="2pm-4pm">2pm - 4pm</option>
-                                <option value="4pm-6pm">4pm - 6pm</option>
-                            </select>
-                            </div>
-                        </div>
-
-                        <div className="mb-3">
-                            <label className="form-label fw-semibold">Additional Instructions</label>
-                            <textarea className="form-control" rows="3" placeholder="Describe your alteration needs..." />
-                        </div>
-
-                        <div className="text-end">
-                            <button type="submit" className="btn btn-primary px-4">
-                            Submit Request
-                            </button>
-                        </div>
-                        </form>
-                    </Card.Body>
-                    </Card>
-
-                )}
-
-                {activeTab === "donation" && (
-                <Card className="text-center p-4">
-                    <Card.Body>
-                    <h5 className="mb-3">Donation Pickup</h5>
-                    <div className="text-muted">🚧 Coming Soon</div>
-                    </Card.Body>
+                    <div className="text-end">
+                        <button style={{ backgroundColor:  '#0a3758', color: '#fff' }}   type="submit" className="btn btn-primary px-4">
+                        Submit Request
+                        </button>
+                    </div>
+                    </form>
+                </Card.Body>
                 </Card>
-                )}
+
+            )}
+
+            {activeTab === "donation" && (
+              <Card className="text-center p-4">
+                  <Card.Body>
+                  <h5 className="mb-3">Donation Pickup</h5>
+                  <div className="text-muted">🚧 Coming Soon</div>
+                  </Card.Body>
+              </Card>
+            )}
 
 
            {activeTab === "payment" && (
@@ -1156,7 +1155,7 @@ const ProfilePage = () => {
                                 <input type="text" className="form-control" placeholder="MM/YY" />
                                 <input type="text" className="form-control" placeholder="CVV" />
                             </div>
-                            <button className="btn btn-primary btn-sm w-100">Save Card</button>
+                            <button  style={{ backgroundColor:  '#0a3758', color: '#fff' }}   className="btn btn-primary btn-sm w-100">Save Card</button>
                             </form>
                         </div>
                         </div>
@@ -1203,7 +1202,7 @@ const ProfilePage = () => {
                     </div>
                     </Card.Body>
                 </Card>
-                )}
+            )}
 
 
             {activeTab === "setting" && (
@@ -1228,7 +1227,7 @@ const ProfilePage = () => {
                             <input type="password" className="form-control" placeholder="Confirm Password" />
                         </div>
                         <div className="col-12">
-                            <button className="btn btn-warning mt-2">Update Password</button>
+                            <button style={{ backgroundColor:  '#0a3758', color: '#fff' }}   className="btn btn-warning mt-2">Update Password</button>
                         </div>
                         </form>
                     </div>
@@ -1256,11 +1255,11 @@ const ProfilePage = () => {
                             Get promotional offers
                         </label>
                         </div>
-                        <button className="btn btn-success mt-2">Save Preferences</button>
+                        <button style={{ backgroundColor:  '#0a3758', color: '#fff' }}   className="btn btn-success mt-2">Save Preferences</button>
                     </div>
                     </Card.Body>
                 </Card>
-                )}
+            )}
 
 
            {activeTab === "delete" && (
@@ -1301,7 +1300,7 @@ const ProfilePage = () => {
                     </Modal>
                     </Card.Body>
                 </Card>
-                )}
+            )}
 
           </Col>
         </Row>
