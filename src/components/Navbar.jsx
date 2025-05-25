@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { Dropdown, Button, Badge, Nav, Navbar as BsNavbar } from "react-bootstrap";
+import { Dropdown, Button, Badge, Nav, Navbar as BsNavbar, Modal, Form, Tabs, Tab } from "react-bootstrap";
 import { NavLink } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+
+import { GoogleLogin, googleLogout } from '@react-oauth/google'; // For Google OAuth
+
 const AppNavbar = ({ activeTab, setActiveTab }) => {
   const currencies = ['INR', 'USD', 'EUR', 'GBP', 'JPY'];
   const [selectedCurrency, setSelectedCurrency] = useState('INR');
- 
 
   const [showDropdown, setShowDropdown] = useState(false);
   const [notifications, setNotifications] = useState([
@@ -17,6 +19,10 @@ const AppNavbar = ({ activeTab, setActiveTab }) => {
     "You received a new comment on your post.",
   ]);
 
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authTab, setAuthTab] = useState('signin'); // 'signin' or 'signup'
+  const [user, setUser] = useState(null); // Store logged in user info
+
   const toggleDropdown = () => {
     setShowDropdown((prev) => !prev);
   };
@@ -25,20 +31,46 @@ const AppNavbar = ({ activeTab, setActiveTab }) => {
     setNotifications([]);
   };
 
-
   const navigate = useNavigate();
 
   const handleLogout = () => {
     // Optional: clear tokens or session data
     // localStorage.removeItem('authToken');
-
-    // Navigate to home page
+    setUser(null);
     navigate('/');
   };
 
+  // Dummy handlers for sign in and sign up form submissions
+  const handleSignIn = (e) => {
+    e.preventDefault();
+    // TODO: validate form and login user
+    setUser({ name: "Demo User" }); // simulate login
+    setShowAuthModal(false);
+  };
+
+  const handleSignUp = (e) => {
+    e.preventDefault();
+    // TODO: validate form and register user
+    setUser({ name: "New User" }); // simulate signup & login
+    setShowAuthModal(false);
+  };
+
+  // Google Login success callback
+  const handleGoogleLoginSuccess = (credentialResponse) => {
+    console.log('Google login success:', credentialResponse);
+    // TODO: send credentialResponse.credential token to backend to verify & create user session
+    setUser({ name: "Google User" }); // simulate user login
+    setShowAuthModal(false);
+  };
+
+  // Google login failure callback
+  const handleGoogleLoginError = () => {
+    alert("Google login failed. Try again.");
+  };
 
   return (
-    <BsNavbar expand="lg" className="bg-white border-bottom shadow-sm px-4 py-2" collapseOnSelect>
+    <>
+      <BsNavbar expand="lg" className="bg-white border-bottom shadow-sm px-4 py-2 sticky-top" collapseOnSelect>
         <BsNavbar.Brand href="#" className="d-flex align-items-center gap-2">
           <span className="fw-semibold text-warning" style={{ fontFamily: 'cursive' }}>
             GoWash
@@ -152,31 +184,95 @@ const AppNavbar = ({ activeTab, setActiveTab }) => {
               )}
             </div>
 
-            {/* Profile Dropdown */}
-            <Dropdown align="end">
-              <Dropdown.Toggle
-                variant="transparent"
-                id="profileDropdown"
-                className="rounded-circle p-2"
-                style={{ cursor: 'pointer', border: 'none' }}
-                aria-label="User Profile"
-              >
-                <i className="bi bi-person-fill fs-5"></i>
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item onClick={() => setActiveTab('profile')}>My Profile</Dropdown.Item>
-                <Dropdown.Item onClick={() => setActiveTab('order')}>Orders</Dropdown.Item>
-                <Dropdown.Item onClick={() => setActiveTab('setting')}>Settings</Dropdown.Item>
-                <Dropdown.Divider />
-                <Dropdown.Item onClick={handleLogout} className="text-danger">
-                  Logout
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+            {/* Show Sign In/Up or Profile dropdown based on user login */}
+            {!user ? (
+              <>
+                <Button variant="outline-primary" onClick={() => { setAuthTab('signin'); setShowAuthModal(true); }}>
+                  Sign In
+                </Button>
+              </>
+            ) : (
+              <Dropdown align="end">
+                <Dropdown.Toggle
+                  variant="transparent"
+                  id="profileDropdown"
+                  className="rounded-circle p-2"
+                  style={{ cursor: 'pointer', border: 'none' }}
+                  aria-label="User Profile"
+                >
+                  <i className="bi bi-person-fill fs-5"></i>
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item onClick={() => setActiveTab('profile')}>My Profile</Dropdown.Item>
+                  <Dropdown.Item onClick={() => setActiveTab('order')}>Orders</Dropdown.Item>
+                  <Dropdown.Item onClick={() => setActiveTab('setting')}>Settings</Dropdown.Item>
+                  <Dropdown.Divider />
+                  <Dropdown.Item onClick={handleLogout} className="text-danger">
+                    Logout
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            )}
           </div>
         </BsNavbar.Collapse>
       </BsNavbar>
 
+      {/* Auth Modal */}
+      <Modal show={showAuthModal} onHide={() => setShowAuthModal(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>{authTab === 'signin' ? 'Sign In' : 'Sign Up'}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Tabs activeKey={authTab} onSelect={(k) => setAuthTab(k)} className="mb-3" justify>
+            <Tab eventKey="signin" title="Sign In">
+              <Form onSubmit={handleSignIn}>
+                <Form.Group className="mb-3" controlId="signInEmail">
+                  <Form.Label>Email address</Form.Label>
+                  <Form.Control type="email" placeholder="Enter email" required />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="signInPassword">
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control type="password" placeholder="Password" required />
+                </Form.Group>
+                <Button variant="primary" type="submit" className="w-100 mb-2">
+                  Sign In
+                </Button>
+              </Form>
+              <div className="text-center my-2">or</div>
+              <GoogleLogin
+                onSuccess={handleGoogleLoginSuccess}
+                onError={handleGoogleLoginError}
+              />
+            </Tab>
+
+            <Tab eventKey="signup" title="Sign Up">
+              <Form onSubmit={handleSignUp}>
+                <Form.Group className="mb-3" controlId="signUpName">
+                  <Form.Label>Full Name</Form.Label>
+                  <Form.Control type="text" placeholder="Enter full name" required />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="signUpEmail">
+                  <Form.Label>Email address</Form.Label>
+                  <Form.Control type="email" placeholder="Enter email" required />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="signUpPassword">
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control type="password" placeholder="Password" required />
+                </Form.Group>
+                <Button variant="primary" type="submit" className="w-100 mb-2">
+                  Sign Up
+                </Button>
+              </Form>
+              <div className="text-center my-2">or</div>
+              <GoogleLogin
+                onSuccess={handleGoogleLoginSuccess}
+                onError={handleGoogleLoginError}
+              />
+            </Tab>
+          </Tabs>
+        </Modal.Body>
+      </Modal>
+    </>
   );
 };
 

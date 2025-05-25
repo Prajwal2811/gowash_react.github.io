@@ -1,7 +1,8 @@
 // MyOrder.js
 import React, { useRef, useState, useEffect } from "react";
 import { Dropdown, Container, Row, Col, Button, Form, Card, ProgressBar, Modal, Badge, Navbar, Nav, Pagination  } from 'react-bootstrap';
-const MyOrder = () => {
+/*************  ✨ Windsurf Command ⭐  *************/
+/*******  604ea575-7fe2-4547-a3cd-003f9998683d  *******/const MyOrder = () => {
     const [selectedStatus, setSelectedStatus] = React.useState("All Orders");
     const statusVariant = {
       "New Order": "secondary",

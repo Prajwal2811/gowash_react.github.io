@@ -20,6 +20,8 @@ import About from './pages/About';
 import Pricing from './pages/Pricing';
 import Contact from './pages/Contact';
 
+
+
 const App = () => {
   const [activeTab, setActiveTab] = useState('profile');
   const location = useLocation();
