@@ -5,7 +5,7 @@ const Contact = () => {
     <div style={styles.container}>
       <div style={styles.card}>
         <div style={styles.columns}>
-          {/* Left Column - Form */}
+          {/* Left Side: Contact Form */}
           <div style={styles.left}>
             <h2 style={styles.heading}>Contact Us</h2>
             <form style={styles.form}>
@@ -16,7 +16,7 @@ const Contact = () => {
             </form>
           </div>
 
-          {/* Right Column - Contact Info */}
+          {/* Right Side: Contact Details */}
           <div style={styles.right}>
             <h3 style={styles.subheading}>Get in Touch</h3>
             <p style={styles.detail}><strong>📧 Email:</strong> support@example.com</p>
@@ -39,6 +39,7 @@ const styles = {
     alignItems: "center",
     padding: "40px 20px",
     fontFamily: "'Segoe UI', sans-serif",
+    boxSizing: "border-box",
   },
   card: {
     backgroundColor: "#ffffff",
@@ -47,19 +48,21 @@ const styles = {
     maxWidth: "1000px",
     width: "100%",
     padding: "30px",
+    boxSizing: "border-box",
   },
   columns: {
     display: "flex",
-    flexWrap: "wrap",
+    flexDirection: "row",
     gap: "30px",
+    flexWrap: "wrap",
   },
   left: {
     flex: "1 1 50%",
-    minWidth: "300px",
+    minWidth: "280px",
   },
   right: {
     flex: "1 1 50%",
-    minWidth: "300px",
+    minWidth: "280px",
     paddingLeft: "20px",
     borderLeft: "1px solid #eee",
   },
@@ -94,6 +97,8 @@ const styles = {
     borderRadius: "6px",
     border: "1px solid #ccc",
     outline: "none",
+    width: "100%",
+    boxSizing: "border-box",
   },
   textarea: {
     padding: "12px",
@@ -102,6 +107,8 @@ const styles = {
     border: "1px solid #ccc",
     outline: "none",
     resize: "vertical",
+    width: "100%",
+    boxSizing: "border-box",
   },
   button: {
     padding: "12px",
@@ -112,7 +119,17 @@ const styles = {
     borderRadius: "6px",
     cursor: "pointer",
     fontWeight: "bold",
+    width: "100%",
   },
 };
+
+// Add responsive behavior using a media query
+const mediaQuery = window.matchMedia("(max-width: 768px)");
+if (mediaQuery.matches) {
+  styles.columns.flexDirection = "column";
+  styles.right.paddingLeft = "0";
+  styles.right.borderLeft = "none";
+  styles.right.paddingTop = "20px";
+}
 
 export default Contact;

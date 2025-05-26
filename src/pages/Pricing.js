@@ -64,13 +64,7 @@ const Pricing = () => {
 
       <div className="pricing-tabs">
         {services.map((service) => (
-          <button
-            key={service}
-            onClick={() => setActiveTab(service)}
-            className={`pricing-tab ${
-              activeTab === service ? "active" : ""
-            }`}
-          >
+          <button key={service} onClick={() => setActiveTab(service)} className={`pricing-tab ${ activeTab === service ? "active" : "" }`} >
             {service}
           </button>
         ))}

@@ -1,68 +1,55 @@
 /* Pricing.css */
+
 .pricing-container {
-  padding: 40px 20px;
-  background-color: #f4f7fc;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  min-height: 100vh;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
 .pricing-heading {
   text-align: center;
-  font-size: 2.5rem;
-  color: #28a745;
-  margin-bottom: 30px;
+  font-size: 2rem;
+  margin-bottom: 20px;
 }
 
 .pricing-tabs {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  margin-bottom: 30px;
   gap: 10px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: #f4f7fc;
-  padding: 10px 0;
+  margin-bottom: 20px;
 }
 
-.pricing-list {
-  scroll-behavior: smooth;
-}
 .pricing-tab {
-  padding: 10px 16px;
-  border-radius: 6px;
+  padding: 10px 15px;
   border: 1px solid #ccc;
-  background-color: #fff;
+  background-color: white;
   cursor: pointer;
-  font-weight: bold;
-  transition: 0.3s;
-  overflow-x: auto;
-  flex-wrap: nowrap;
-  white-space: nowrap;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.pricing-tab:hover {
+  background-color: #f0f0f0;
 }
 
 .pricing-tab.active {
-  background-color: #28a745;
-  color: #fff;
-  border-color: #28a745;
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
 }
 
 .pricing-card {
-  background-color: #fff;
-  max-width: 900px;
-  width: 100%;
-  margin: 0 auto;
+  background-color: #f9f9f9;
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
 }
 
 .pricing-subheading {
-  font-size: 1.5rem;
   margin-bottom: 15px;
-  color: #333;
-  border-bottom: 2px solid #eee;
+  font-size: 1.5rem;
+  border-bottom: 2px solid #007bff;
   padding-bottom: 5px;
 }
 
@@ -70,14 +57,50 @@
   list-style: none;
   padding: 0;
   margin: 0;
-  max-height: 500px;
-  overflow-y: auto;
 }
 
 .pricing-item {
   display: flex;
   justify-content: space-between;
   padding: 10px 0;
-  border-bottom: 1px dashed #ddd;
+  border-bottom: 1px dashed #ccc;
   font-size: 1rem;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 768px) {
+  .pricing-tab {
+    font-size: 0.9rem;
+    padding: 8px 12px;
+  }
+
+  .pricing-item {
+    font-size: 0.95rem;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .pricing-item span:last-child {
+    margin-top: 5px;
+    font-weight: bold;
+  }
+
+  .pricing-subheading {
+    font-size: 1.3rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .pricing-tab {
+    width: 100%;
+    text-align: center;
+  }
+
+  .pricing-heading {
+    font-size: 1.5rem;
+  }
+
+  .pricing-subheading {
+    font-size: 1.2rem;
+  }
 }

@@ -1,0 +1,92 @@
+/* Plain white background for the whole page */
+.about-page {
+  min-height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px 20px;
+  background: #ffffff; /* changed from gradient to plain white */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Card container with shadow and border radius */
+.about-card {
+  background: #fff;
+  max-width: 800px;
+  width: 100%;
+  border-radius: 16px;
+  box-shadow: 0 12px 25px rgba(0, 123, 255, 0.15);
+  display: flex;
+  overflow: hidden;
+  border-left: 8px solid #007bff;
+  animation: fadeIn 0.8s ease forwards;
+}
+
+/* Left accent bar to match border-left */
+.accent-bar {
+  width: 8px;
+  background: #007bff;
+  flex-shrink: 0;
+}
+
+/* Content area with padding */
+.about-content {
+  padding: 30px 40px;
+  color: #222;
+}
+
+/* Heading style */
+.about-heading {
+  font-size: 2.75rem;
+  margin-bottom: 25px;
+  font-weight: 700;
+  color: #007bff;
+  letter-spacing: 1.2px;
+  user-select: none;
+}
+
+/* Paragraph style */
+.about-text {
+  font-size: 1.15rem;
+  line-height: 1.7;
+  margin-bottom: 18px;
+  color: #444;
+  text-align: justify;
+}
+
+/* Highlight the brand name */
+.highlight {
+  font-weight: 700;
+  color: #0056b3;
+  font-style: italic;
+}
+
+/* Subtle fade-in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px);}
+  to { opacity: 1; transform: translateY(0);}
+}
+
+/* Responsive for smaller devices */
+@media (max-width: 700px) {
+  .about-card {
+    flex-direction: column;
+    border-left: none;
+    border-top: 8px solid #007bff;
+  }
+  .accent-bar {
+    width: 100%;
+    height: 8px;
+  }
+  .about-content {
+    padding: 25px 20px;
+  }
+  .about-heading {
+    font-size: 2rem;
+    text-align: center;
+  }
+  .about-text {
+    font-size: 1rem;
+    margin-bottom: 15px;
+  }
+}
