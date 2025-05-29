@@ -22,14 +22,20 @@ import Contact from './pages/Contact';
 
 import Login from './pages/Admin/Login';
 import Dashboard from './pages/Admin/Dashboard';
+
 import AllCustomers from './pages/Admin/Customers';
 import AddCustomer from './pages/Admin/AddCustomer';
-import EditCustomer from './pages/Admin/EditCustomer';
+import ViewCustomer from './pages/Admin/ViewCustomer';
+
 import AllStaff from './pages/Admin/Staff';
+import EditStaff from './pages/Admin/EditStaff';
 import AddStaff from './pages/Admin/AddStaff';
+
 import Orders from './pages/Admin/Orders';
+import ViewOrder from './pages/Admin/ViewOrder';
+
 import Reports from './pages/Admin/Reports';
-import Service from './pages/Admin/Service';
+import Services from './pages/Admin/Services';
 import AddService from './pages/Admin/AddService';
 import AdminSettings from './pages/Admin/AdminSettings';
 
@@ -74,11 +80,15 @@ const App = () => {
         <Route path="/admin/dashboard" element={<Dashboard />} />
         <Route path="/admin/customers" element={<AllCustomers />} />
         <Route path="/admin/customers/add" element={<AddCustomer />} />
-        <Route path="/admin/customers/edit/:id" element={<EditCustomer />} />
+        <Route path="/admin/customers/view/:id" element={<ViewCustomer />} />
         <Route path="/admin/staff" element={<AllStaff />} />
+        <Route path="/admin/staff/edit/:id" element={<EditStaff />} />
+
         <Route path="/admin/staff/add" element={<AddStaff />} />
         <Route path="/admin/orders" element={<Orders />} />
-        <Route path="/admin/services" element={<Service />} />
+        <Route path="/admin/order/view/:orderId" element={<ViewOrder />} />
+
+        <Route path="/admin/services" element={<Services />} />
         <Route path="/admin/services/add" element={<AddService />} />
         <Route path="/admin/reports" element={<Reports />} />
         <Route path="/admin/settings" element={<AdminSettings />} />

@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { Table, Container, Row, Col, Button } from 'react-bootstrap';
-import { FaEdit, FaTrashAlt, FaPlus } from 'react-icons/fa';
+import { FaEye, FaTrashAlt, FaPlus } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
 import Navbar from '../../components/Admin/Navbar';
 import Sidebar from '../../components/Admin/Sidebar';
-
 const customerData = [
   {
     id: 1,
@@ -28,18 +27,65 @@ const customerData = [
     phone: '456-789-0123',
     status: 'Active',
   },
+  {
+    id: 4,
+    name: 'Alice Cooper',
+    email: 'alice.cooper@example.com',
+    phone: '321-654-0987',
+    status: 'Active',
+  },
+  {
+    id: 5,
+    name: 'Michael Brown',
+    email: 'michael.brown@example.com',
+    phone: '654-321-7654',
+    status: 'Inactive',
+  },
+  {
+    id: 6,
+    name: 'Emma Wilson',
+    email: 'emma.wilson@example.com',
+    phone: '789-012-3456',
+    status: 'Active',
+  },
+  {
+    id: 7,
+    name: 'David Lee',
+    email: 'david.lee@example.com',
+    phone: '987-123-4567',
+    status: 'Active',
+  },
+  {
+    id: 8,
+    name: 'Sophia Martinez',
+    email: 'sophia.martinez@example.com',
+    phone: '456-789-0123',
+    status: 'Inactive',
+  },
+  {
+    id: 9,
+    name: 'James Anderson',
+    email: 'james.anderson@example.com',
+    phone: '123-987-6543',
+    status: 'Active',
+  },
+  {
+    id: 10,
+    name: 'Olivia Thomas',
+    email: 'olivia.thomas@example.com',
+    phone: '321-654-9870',
+    status: 'Active',
+  },
 ];
+
 
 function Customers() {
   const [activeTab, setActiveTab] = useState('all-customers');
   const navigate = useNavigate();
 
-  const handleCreate = () => {
-    navigate('/admin/customers/add');
-  };
 
-  const handleEdit = (id) => {
-    navigate(`/admin/customers/edit/${id}`);
+  const handleView = (id) => {
+    navigate(`/admin/customers/view/${id}`);
   };
 
   const handleDelete = (id) => {
@@ -63,9 +109,6 @@ function Customers() {
           <Col xs={12} md={9} lg={10} className="p-4">
             <div className="d-flex justify-content-between align-items-center mb-3">
               <h4 className="mb-0">Customer List</h4>
-              <Button variant="primary" size="sm" onClick={handleCreate}>
-                <FaPlus className="me-1" /> Create Customer
-              </Button>
             </div>
 
             <Table striped bordered hover responsive>
@@ -95,12 +138,12 @@ function Customers() {
                     </td>
                     <td>
                       <Button
-                        variant="warning"
+                        variant="info"
                         size="sm"
                         className="me-2"
-                        onClick={() => handleEdit(customer.id)}
+                        onClick={() => handleView(customer.id)}
                       >
-                        <FaEdit />
+                        <FaEye />
                       </Button>
                       <Button
                         variant="danger"

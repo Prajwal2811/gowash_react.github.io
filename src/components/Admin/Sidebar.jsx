@@ -17,7 +17,6 @@ const Sidebar = () => {
       label: 'Customers',
       submenu: [
         { key: 'all-customers', label: 'All Customers', path: '/admin/customers' },
-        { key: 'add-customer', label: 'Add Customer', path: '/admin/customers/add' },
       ],
     },
     {
@@ -33,8 +32,8 @@ const Sidebar = () => {
       key: 'services',
       label: 'Services',
       submenu: [
-        { key: 'laundry', label: 'Laundry', path: '/admin/services/laundry' },
-        { key: 'dry-cleaning', label: 'Dry Cleaning', path: '/admin/services/dry-cleaning' },
+        { key: 'services', label: 'Services', path: '/admin/services' },
+        { key: 'add-services', label: 'Add Services', path: '/admin/services/add-services' },
       ],
     },
     { key: 'reports', label: 'Reports', path: '/admin/reports' },
