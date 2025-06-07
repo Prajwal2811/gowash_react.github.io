@@ -33,10 +33,9 @@ const Sidebar = () => {
       label: 'Services',
       submenu: [
         { key: 'services', label: 'Services', path: '/admin/services' },
-        { key: 'add-services', label: 'Add Services', path: '/admin/services/add-services' },
+        { key: 'add', label: 'Add Services', path: '/admin/services/add' },
       ],
     },
-    { key: 'reports', label: 'Reports', path: '/admin/reports' },
     { key: 'settings', label: 'Settings', path: '/admin/settings' },
     { key: 'logout', label: 'Logout', path: '/admin' },
   ];

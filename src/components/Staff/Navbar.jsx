@@ -91,7 +91,7 @@ const Navbar = ({ activeTab, setActiveTab, toggleSidebar }) => {
             </div>
 
             {/* Logout */}
-            <Button variant="outline-danger" size="sm" onClick={() => window.location.href = '/admin'}>
+            <Button variant="outline-danger" size="sm" onClick={() => window.location.href = '/staff'}>
               Logout
             </Button>
           </Nav>

@@ -23,6 +23,10 @@ import Contact from './pages/Contact';
 import Login from './pages/Admin/Login';
 import Dashboard from './pages/Admin/Dashboard';
 
+
+
+
+
 import AllCustomers from './pages/Admin/Customers';
 import AddCustomer from './pages/Admin/AddCustomer';
 import ViewCustomer from './pages/Admin/ViewCustomer';
@@ -39,14 +43,24 @@ import Services from './pages/Admin/Services';
 import AddService from './pages/Admin/AddService';
 import AdminSettings from './pages/Admin/AdminSettings';
 
+
+
+import StaffLogin from './pages/Staff/Login';
+import StaffDashboard from './pages/Staff/Dashboard';
+import StaffNewRequest from './pages/Staff/NewRequest';
+import StaffOrderHistory from './pages/Staff/OrderHistory';
+
+
+
 const App = () => {
   const [activeTab, setActiveTab] = useState('profile');
   const location = useLocation();
 
   const isAdminRoute = location.pathname.startsWith('/admin');
+  const isStaffRoute = location.pathname.startsWith('/staff');
   const isProfileRoute = location.pathname.startsWith('/my-profile');
 
-  const shouldHideNavbar = isAdminRoute || isProfileRoute;
+  const shouldHideNavbar = isAdminRoute || isStaffRoute  || isProfileRoute;
 
   const renderContent = () => {
     switch (activeTab) {
@@ -92,6 +106,13 @@ const App = () => {
         <Route path="/admin/services/add" element={<AddService />} />
         <Route path="/admin/reports" element={<Reports />} />
         <Route path="/admin/settings" element={<AdminSettings />} />
+
+
+
+        <Route path="/staff" element={<StaffLogin />} />
+        <Route path="/staff/dashboard" element={<StaffDashboard />} />
+        <Route path="/staff/new-request" element={<StaffNewRequest />} />
+        <Route path="/staff/order-history" element={<StaffOrderHistory />} />
 
         {/* Profile Route */}
         <Route

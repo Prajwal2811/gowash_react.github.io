@@ -6,14 +6,14 @@ import Navbar from '../../components/Admin/Navbar';
 import Sidebar from '../../components/Admin/Sidebar';
 
 const initialServices = [
-  { serviceId: 1, name: 'Dry Clean', category: 'Laundry', price: 120, status: 'Active' },
-  { serviceId: 2, name: 'Wash and Steam Iron', category: 'Laundry', price: 90, status: 'Active' },
-  { serviceId: 3, name: 'Wash and Fold', category: 'Laundry', price: 70, status: 'Active' },
-  { serviceId: 4, name: 'Shoe Cleaning', category: 'Accessories', price: 150, status: 'Active' },
-  { serviceId: 5, name: 'Steam Iron', category: 'Ironing', price: 60, status: 'Inactive' },
-  { serviceId: 6, name: 'Carpet Cleaning', category: 'Home Services', price: 500, status: 'Active' },
-  { serviceId: 7, name: 'Curtain Laundry', category: 'Home Services', price: 300, status: 'Active' },
-  { serviceId: 8, name: 'Stain Removals', category: 'Special Care', price: 200, status: 'Active' },
+  { serviceId: 1, name: 'Dry Clean', price: 120, status: 'Active' },
+  { serviceId: 2, name: 'Wash and Steam Iron', price: 90, status: 'Active' },
+  { serviceId: 3, name: 'Wash and Fold', price: 70, status: 'Active' },
+  { serviceId: 4, name: 'Shoe Cleaning', price: 150, status: 'Active' },
+  { serviceId: 5, name: 'Steam Iron', price: 60, status: 'Inactive' },
+  { serviceId: 6, name: 'Carpet Cleaning', price: 500, status: 'Active' },
+  { serviceId: 7, name: 'Curtain Laundry', price: 300, status: 'Active' },
+  { serviceId: 8, name: 'Stain Removals', price: 200, status: 'Active' },
 ];
 
 function getStatusBadge(status) {
@@ -58,7 +58,6 @@ function Services() {
                 <tr>
                   <th>Service ID</th>
                   <th>Name</th>
-                  <th>Category</th>
                   <th>Price (₹)</th>
                   <th>Status</th>
                   <th>Actions</th>
@@ -69,7 +68,6 @@ function Services() {
                   <tr key={service.serviceId}>
                     <td>{service.serviceId}</td>
                     <td>{service.name}</td>
-                    <td>{service.category}</td>
                     <td>{service.price}</td>
                     <td>
                       <span className={`badge bg-${getStatusBadge(service.status)}`}>
